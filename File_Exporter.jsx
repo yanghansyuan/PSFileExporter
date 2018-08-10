@@ -39,7 +39,7 @@ function myInput(){
     pathCorrect = true
     
     //window
-    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.3"); 
+    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.4"); 
     var mainGroup = myWindow.add("group");
     mainGroup.orientation = "row"
     var firstRowGroup = mainGroup.add("group");
@@ -49,7 +49,7 @@ function myInput(){
     var rdiGroup = firstRowGroup.add("group"); 
     rdiGroup.orientation = "row"
     rdiGroup.alignChildren = "left";
-    rdiGroup.add("statictext", undefined, "Now color:")
+    rdiGroup.add("statictext", undefined, "Now color:   ")
     var rdi_RGB = rdiGroup.add("radiobutton",undefined,"RGB")
     var rdi_CMYK = rdiGroup.add("radiobutton",undefined,"CMYK")
     if(originalDocMode == DocumentMode.RGB)
@@ -67,9 +67,17 @@ function myInput(){
     rdiTarget.add("statictext", undefined, "Export every:")
     rdi_artLayers = rdiTarget.add("radiobutton",undefined,"Layer")
     rdi_layerSets = rdiTarget.add("radiobutton",undefined,"Group")
-    // rdi_artLayers.value = true
     rdi_layerSets.value = true
     
+    //radioBut:Resize
+    var rdiResize = firstRowGroup.add("group"); 
+    rdiResize.orientation = "row"
+    rdiResize.alignChildren = "left";
+    // var myPanel = rdiTarget.add("panel", undefined, "export every")
+    rdiResize.add("statictext", undefined, "Resize and crop:")
+    rdi_resize = rdiResize.add("radiobutton",undefined,"Yes")
+    rdi_resizeNo = rdiResize.add("radiobutton",undefined,"No")
+    rdi_resize.value = true
     
 
     //editText
@@ -184,20 +192,25 @@ function mainProcess(_index){
         var bk = docLay.getByName ("背景")
         bk.remove()
     }
-    catch(err)
-    {
-        
-    }
+    catch(err){}
+  
     
     try
     {
         var bk = docLay.getByName ("Background")
         bk.remove()
     }
-    catch(err)
-    {
+    catch(err){}
+    
 
+    
+
+    //-----Resize-----
+    if(rdi_resize) 
+    {
+        app.activeDocument.trim(TrimType.TRANSPARENT,true,true,true,true)
     }
+    
 
     //-----save file-----   
     app.activeDocument = newDoc //swtich back to target doc 

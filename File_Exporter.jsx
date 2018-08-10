@@ -12,6 +12,8 @@ var myRoot
 var desc
 var descCheck 
 
+var pathCorrect
+
 
 function myInput(){
 
@@ -28,9 +30,10 @@ function myInput(){
     originalWidth = app.activeDocument.width;
     originalHeight = app.activeDocument.height;
     originalDocMode = app.activeDocument.mode
+    pathCorrect = true
     
     //window
-    var myWindow = new Window("dialog","YHS's File_Exporter  v1.2"); 
+    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.3"); 
     myWindow.orientation = "row" 
     //radioBut
     var rdiGroup = myWindow.add("group"); 
@@ -74,6 +77,7 @@ function myInput(){
     mybutGroup.add('button',undefined,"Cancel");  
 
     but_export.onClick =function(){
+        
         callProcess();
     }
 
@@ -84,14 +88,23 @@ function myInput(){
 function callProcess()
 {
     for (var index = 0; index < groupAmount; index++) {
-        mainProcess(index.toString());
-    }    
+        if(pathCorrect==true)
+        {
+            mainProcess(index.toString());
+        }
+        else
+        {
+            alert("Please check your path.")            
+            break
+        }
+    }
+
+    pathCorrect=true //set true true for next excution
 }
 
 
 function mainProcess(_index){
     
-
     //-----duplicat and merge------
     if(originalDocMode == DocumentMode.RGB)
     {
@@ -115,28 +128,33 @@ function mainProcess(_index){
     {
         var bk = docLay.getByName ("背景")
         bk.remove()
-
     }
-    catch(err)
-    {
-    }
+    catch(err){}
     
     try
     {
         var bk = docLay.getByName ("Background")
         bk.remove()
-
     }
-    catch(err)
-    {
-    }
+    catch(err){}
 
 
-    //-----save-----   
+    //-----save file-----   
     app.activeDocument = newDoc //swtich back to target doc 
     fileRef = File( myRoot.text + "\\" + _index + "_" + fileName);    
     var psdOpts = new PhotoshopSaveOptions;
-    app.activeDocument.saveAs(fileRef,psdOpts,true);
+    try{
+
+        app.activeDocument.saveAs(fileRef,psdOpts,true);
+    }
+    catch(err)
+    {        
+        pathCorrect = false //make stop loop
+        app.activeDocument.close(SaveOptions.DONOTSAVECHANGES) //close extra new doc
+        app.activeDocument = originalDoc //back to original doc
+        return //make exit loop
+    }
+
     //save path
     desc.putString(1,myRoot.text)
     app.putCustomOptions("myPSSetting",desc,true)

@@ -14,6 +14,10 @@ var descCheck
 
 var pathCorrect
 
+var rdi_artLayers
+var rdi_layerSets
+var srcCopyTrgt
+
 
 function myInput(){
 
@@ -26,7 +30,9 @@ function myInput(){
         alert("Please open document first!")
         return
     }
-    groupAmount = app.activeDocument.layerSets.length    
+
+    //set default variable
+    groupAmount = app.activeDocument.layerSets.length     //default 
     originalWidth = app.activeDocument.width;
     originalHeight = app.activeDocument.height;
     originalDocMode = app.activeDocument.mode
@@ -34,10 +40,16 @@ function myInput(){
     
     //window
     var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.3"); 
-    myWindow.orientation = "row" 
-    //radioBut
-    var rdiGroup = myWindow.add("group"); 
+    var mainGroup = myWindow.add("group");
+    mainGroup.orientation = "row"
+    var firstRowGroup = mainGroup.add("group");
+    firstRowGroup.orientation = "column"
+    firstRowGroup.alignChildren = "left"
+    //radioBut:color
+    var rdiGroup = firstRowGroup.add("group"); 
     rdiGroup.orientation = "row"
+    rdiGroup.alignChildren = "left";
+    rdiGroup.add("statictext", undefined, "Now color:")
     var rdi_RGB = rdiGroup.add("radiobutton",undefined,"RGB")
     var rdi_CMYK = rdiGroup.add("radiobutton",undefined,"CMYK")
     if(originalDocMode == DocumentMode.RGB)
@@ -47,13 +59,25 @@ function myInput(){
     else{
         rdi_CMYK.value = true
     }
+    //radioBut:Export target
+    var rdiTarget = firstRowGroup.add("group"); 
+    rdiTarget.orientation = "row"
+    rdiTarget.alignChildren = "left";
+    // var myPanel = rdiTarget.add("panel", undefined, "export every")
+    rdiTarget.add("statictext", undefined, "Export every:")
+    rdi_artLayers = rdiTarget.add("radiobutton",undefined,"Layer")
+    rdi_layerSets = rdiTarget.add("radiobutton",undefined,"Group")
+    // rdi_artLayers.value = true
+    rdi_layerSets.value = true
+    
+    
 
     //editText
-    var myPathGroup = myWindow.add("group");
+    var myPathGroup = mainGroup.add("group");
     myPathGroup.orientation = "column"
     //save path preference
 
-    //defined prefence
+    //defined preference
     desc = new ActionDescriptor();
     
     try
@@ -67,11 +91,11 @@ function myInput(){
         myRoot = myPathGroup.add("edittext",undefined,"/Users/yhs/Desktop/export/") 
     }
 
-    // myRoot = myPathGroup.add("edittext",undefined,"/Users/yhs/Desktop/export/") 
     myRoot.characters =30;
     myRoot.active = true
+
     //button
-    var mybutGroup = myWindow.add("group");
+    var mybutGroup = mainGroup.add("group");
     mybutGroup.orientation = "column"
     var but_export = mybutGroup.add('button',undefined,"Export");
     mybutGroup.add('button',undefined,"Cancel");  
@@ -79,6 +103,7 @@ function myInput(){
     but_export.onClick =function(){
         
         callProcess();
+        alert("Complete") //todo:check is sussce or not
     }
 
     myWindow.show();
@@ -87,9 +112,29 @@ function myInput(){
 
 function callProcess()
 {
+    
+    //export layer or group
+    if(rdi_artLayers.value)
+    {
+        groupAmount = app.activeDocument.artLayers.length    
+    }   
+    else
+    {
+        groupAmount = app.activeDocument.layerSets.length        
+    }
+
+    if(groupAmount==0)
+    {
+        if(rdi_artLayers.value) alert("There's no layer to export.")
+        if(rdi_layerSets.value) alert("There's no group to export.")
+    }
+
+    //looping all layers or groups and call main function
     for (var index = 0; index < groupAmount; index++) {
+        
         if(pathCorrect==true)
-        {
+        {    
+            
             mainProcess(index.toString());
         }
         else
@@ -106,45 +151,59 @@ function callProcess()
 function mainProcess(_index){
     
     //-----duplicat and merge------
+    var newDoc
     if(originalDocMode == DocumentMode.RGB)
     {
-        var newDoc = app.documents.add(originalWidth,originalHeight,300,"Untitled-1" +_index, NewDocumentMode.RGB) //add new doc  
+        newDoc = app.documents.add(originalWidth,originalHeight,300,"Untitled-1" +_index, NewDocumentMode.RGB) //add new doc  
     }
     else
     {
-        var newDoc = app.documents.add(originalWidth,originalHeight,300,"Untitled-1" +_index, NewDocumentMode.CMYK) //add new doc  
+        //todo:use original resolution
+        newDoc = app.documents.add(originalWidth,originalHeight,300,"Untitled-1" +_index, NewDocumentMode.CMYK) //add new doc  
     }
-
     app.activeDocument = originalDoc
-    var sourceGroup = app.activeDocument.layerSets[_index]//get group
-    var fileName = sourceGroup.name 
-
-    sourceGroup.duplicate ( newDoc );//dupilicate to new doc
-
+    
+    //layer or group
+    if(rdi_artLayers.value==true)
+    {
+        srcCopyTrgt = app.activeDocument.artLayers[_index]//get layer
+    }else
+    {
+        srcCopyTrgt = app.activeDocument.layerSets[_index]//get group            
+    }
+    
+    var fileName = srcCopyTrgt.name 
+    srcCopyTrgt.duplicate ( newDoc );//duplicate to new doc
+    
     //-----del background layer-----
     app.activeDocument = newDoc //swtich back to target doc
     docLay = app.activeDocument.layers
+    
     try
     {
         var bk = docLay.getByName ("背景")
         bk.remove()
     }
-    catch(err){}
+    catch(err)
+    {
+        
+    }
     
     try
     {
         var bk = docLay.getByName ("Background")
         bk.remove()
     }
-    catch(err){}
+    catch(err)
+    {
 
+    }
 
     //-----save file-----   
     app.activeDocument = newDoc //swtich back to target doc 
     fileRef = File( myRoot.text + "\\" + _index + "_" + fileName);    
     var psdOpts = new PhotoshopSaveOptions;
     try{
-
         app.activeDocument.saveAs(fileRef,psdOpts,true);
     }
     catch(err)

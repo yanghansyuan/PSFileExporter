@@ -1,4 +1,17 @@
-﻿myInput();
+﻿/*
+Made by: yang.hansyuan@gmail.com
+version: v1.5 2018/08/10
+update:
+1.fix resize malfunction problem
+2.change color mode into label
+
+Todo:
+1.different file dropdown menu
+2.mac path's slash. add empty path check
+
+*/
+
+myInput();
 
 var originalDoc
 var targetDoc
@@ -18,6 +31,8 @@ var rdi_artLayers
 var rdi_layerSets
 var srcCopyTrgt
 
+var processCount
+
 
 function myInput(){
 
@@ -32,14 +47,15 @@ function myInput(){
     }
 
     //set default variable
-    groupAmount = app.activeDocument.layerSets.length     //default 
+    groupAmount = app.activeDocument.artLayers.length     //default 
     originalWidth = app.activeDocument.width;
     originalHeight = app.activeDocument.height;
     originalDocMode = app.activeDocument.mode
     pathCorrect = true
-    
+    processCount =0
+
     //window
-    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.4"); 
+    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.5"); 
     var mainGroup = myWindow.add("group");
     mainGroup.orientation = "row"
     var firstRowGroup = mainGroup.add("group");
@@ -49,16 +65,7 @@ function myInput(){
     var rdiGroup = firstRowGroup.add("group"); 
     rdiGroup.orientation = "row"
     rdiGroup.alignChildren = "left";
-    rdiGroup.add("statictext", undefined, "Now color:   ")
-    var rdi_RGB = rdiGroup.add("radiobutton",undefined,"RGB")
-    var rdi_CMYK = rdiGroup.add("radiobutton",undefined,"CMYK")
-    if(originalDocMode == DocumentMode.RGB)
-    {
-        rdi_RGB.value = true
-    }
-    else{
-        rdi_CMYK.value = true
-    }
+    rdiGroup.add("statictext", undefined, "Color Mode: " + originalDocMode.toString().split(".")[1])
     //radioBut:Export target
     var rdiTarget = firstRowGroup.add("group"); 
     rdiTarget.orientation = "row"
@@ -67,7 +74,7 @@ function myInput(){
     rdiTarget.add("statictext", undefined, "Export every:")
     rdi_artLayers = rdiTarget.add("radiobutton",undefined,"Layer")
     rdi_layerSets = rdiTarget.add("radiobutton",undefined,"Group")
-    rdi_layerSets.value = true
+    rdi_artLayers.value = true
     
     //radioBut:Resize
     var rdiResize = firstRowGroup.add("group"); 
@@ -77,7 +84,7 @@ function myInput(){
     rdiResize.add("statictext", undefined, "Resize and crop:")
     rdi_resize = rdiResize.add("radiobutton",undefined,"Yes")
     rdi_resizeNo = rdiResize.add("radiobutton",undefined,"No")
-    rdi_resize.value = true
+    rdi_resizeNo.value = true
     
 
     //editText
@@ -111,7 +118,8 @@ function myInput(){
     but_export.onClick =function(){
         
         callProcess();
-        alert("Complete") //todo:check is sussce or not
+        if((processCount==groupAmount)&&(groupAmount!=0)) alert("Complete") //todo:check is sussce or not
+        processCount=0
     }
 
     myWindow.show();
@@ -120,7 +128,7 @@ function myInput(){
 
 function callProcess()
 {
-    
+    processCount = 0
     //export layer or group
     if(rdi_artLayers.value)
     {
@@ -150,6 +158,8 @@ function callProcess()
             alert("Please check your path.")            
             break
         }
+
+        processCount++
     }
 
     pathCorrect=true //set true true for next excution
@@ -196,7 +206,7 @@ function mainProcess(_index){
   
     
     try
-    {
+    {        
         var bk = docLay.getByName ("Background")
         bk.remove()
     }
@@ -206,15 +216,13 @@ function mainProcess(_index){
     
 
     //-----Resize-----
-    if(rdi_resize) 
-    {
-        app.activeDocument.trim(TrimType.TRANSPARENT,true,true,true,true)
-    }
     
+    if(rdi_resize.value) app.activeDocument.trim(TrimType.TRANSPARENT,true,true,true,true)
+        
 
     //-----save file-----   
     app.activeDocument = newDoc //swtich back to target doc 
-    fileRef = File( myRoot.text + "\\" + _index + "_" + fileName);    
+    fileRef = File( myRoot.text + "\\" + _index + "_" + fileName);       
     var psdOpts = new PhotoshopSaveOptions;
     try{
         app.activeDocument.saveAs(fileRef,psdOpts,true);

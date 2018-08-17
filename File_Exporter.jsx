@@ -1,13 +1,11 @@
 ﻿/*
 Made by: yang.hansyuan@gmail.com
-version: v1.5 2018/08/10
+version: v1.6 2018/08/17
 update:
-1.fix resize malfunction problem
-2.change color mode into label
+1.add basic fileformats
 
 Todo:
-1.different file dropdown menu
-2.mac path's slash. add empty path check
+1.mac path's slash. add empty path check
 
 */
 
@@ -30,6 +28,7 @@ var pathCorrect
 var rdi_artLayers
 var rdi_layerSets
 var srcCopyTrgt
+var formatDpd
 
 var processCount
 
@@ -55,7 +54,7 @@ function myInput(){
     processCount =0
 
     //window
-    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.5"); 
+    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.6"); 
     var mainGroup = myWindow.add("group");
     mainGroup.orientation = "row"
     var firstRowGroup = mainGroup.add("group");
@@ -86,6 +85,11 @@ function myInput(){
     rdi_resizeNo = rdiResize.add("radiobutton",undefined,"No")
     rdi_resizeNo.value = true
     
+    //file format
+    var formatDpdG = firstRowGroup.add("group"); 
+    formatDpdG.add("statictext", undefined, "Export format:")
+    formatDpd =  formatDpdG.add("dropdownlist", undefined, ["psd","png","jpg","tiff","targa","pdf"])
+    formatDpd.selection = 0
 
     //editText
     var myPathGroup = mainGroup.add("group");
@@ -145,17 +149,64 @@ function callProcess()
         if(rdi_layerSets.value) alert("There's no group to export.")
     }
 
+    //export format
+    var nowFormat = formatDpd.selection.text
+    var exFormat
+    var formatCorrect = true
+    switch(nowFormat)
+    {
+        case "png":
+            if(originalDocMode==DocumentMode.CMYK)
+            {
+                alert("png only work in RGB mode")
+                formatCorrect = false //todo:change to specific bool 
+            }
+            else
+            {
+                exFormat = new PNGSaveOptions()
+            }
+            break;
+            
+        case "jpg":
+            exFormat = new JPEGSaveOptions()
+            exFormat.quality = 12
+            break;
+
+        case "tiff": exFormat = new TiffSaveOptions(); break;
+
+        case "targa":
+            if(originalDocMode==DocumentMode.CMYK)
+            {
+                alert("targa only work in RGB mode")
+                formatCorrect = false
+            }
+            else
+            {
+                exFormat = new TargaSaveOptions()
+            }
+            break;
+
+        case "pdf": exFormat = new PDFSaveOptions(); break;
+
+        case "psd": exFormat = new PhotoshopSaveOptions(); break;
+    }
+
     //looping all layers or groups and call main function
     for (var index = 0; index < groupAmount; index++) {
         
-        if(pathCorrect==true)
+        if((pathCorrect)&&(formatCorrect))
         {    
             
-            mainProcess(index.toString());
+            mainProcess(index.toString(), exFormat);
         }
-        else
+        else if(!pathCorrect)
         {
             alert("Please check your path.")            
+            break
+        }
+        else if(!formatCorrect)
+        {
+            alert("Please check your format.")            
             break
         }
 
@@ -163,10 +214,11 @@ function callProcess()
     }
 
     pathCorrect=true //set true true for next excution
+    formatCorrect = true
 }
 
 
-function mainProcess(_index){
+function mainProcess(_index,_exFormat){
     
     //-----duplicat and merge------
     var newDoc
@@ -225,7 +277,7 @@ function mainProcess(_index){
     fileRef = File( myRoot.text + "\\" + _index + "_" + fileName);       
     var psdOpts = new PhotoshopSaveOptions;
     try{
-        app.activeDocument.saveAs(fileRef,psdOpts,true);
+        app.activeDocument.saveAs(fileRef,_exFormat,true);
     }
     catch(err)
     {        
@@ -246,8 +298,3 @@ function mainProcess(_index){
 
 }
 
-    
-//test
-// var artLayerRef = activeDocument.artLayers.add()
-// artLayerRef.kind = LayerKind.TEXT
-// var textItemRef = artLayerRef.textItem.contents = myRoot.text;

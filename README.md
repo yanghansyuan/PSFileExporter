@@ -1,13 +1,9 @@
 # PSFileExporter
 Export every group in Photoshop to separate files. 
 
-version: v1.5 2018/08/10
-
+version: v1.6 2018/08/17
 update:
-
-1.fix resize malfunction problem
-
-2.change color mode into label
+1.add basic fileformats
 
 You can double click this file, and choose open with Photoshop to excute the script.
 Or you can put this script under the Photoshop path and excute from the Photoshop: File > Script >

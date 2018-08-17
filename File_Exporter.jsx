@@ -1,8 +1,8 @@
 ﻿/*
 Made by: yang.hansyuan@gmail.com
-version: v1.6 2018/08/17
+version: v1.61 2018/08/17
 update:
-1.add basic fileformats
+1.fix original resolution
 
 Todo:
 1.mac path's slash. add empty path check
@@ -16,6 +16,7 @@ var targetDoc
 
 var originalWidth 
 var originalHeight 
+var originalRes
 
 var groupAmount
 var myRoot
@@ -50,11 +51,12 @@ function myInput(){
     originalWidth = app.activeDocument.width;
     originalHeight = app.activeDocument.height;
     originalDocMode = app.activeDocument.mode
+    originalRes = app.activeDocument.resolution
     pathCorrect = true
     processCount =0
 
     //window
-    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.6"); 
+    var myWindow = new Window("dialog","YHS's PS File_Exporter  v1.61"); 
     var mainGroup = myWindow.add("group");
     mainGroup.orientation = "row"
     var firstRowGroup = mainGroup.add("group");
@@ -224,12 +226,12 @@ function mainProcess(_index,_exFormat){
     var newDoc
     if(originalDocMode == DocumentMode.RGB)
     {
-        newDoc = app.documents.add(originalWidth,originalHeight,300,"Untitled-1" +_index, NewDocumentMode.RGB) //add new doc  
+        newDoc = app.documents.add(originalWidth,originalHeight,originalRes,"Untitled-1" +_index, NewDocumentMode.RGB) //add new doc  
     }
     else
     {
-        //todo:use original resolution
-        newDoc = app.documents.add(originalWidth,originalHeight,300,"Untitled-1" +_index, NewDocumentMode.CMYK) //add new doc  
+        
+        newDoc = app.documents.add(originalWidth,originalHeight,originalRes,"Untitled-1" +_index, NewDocumentMode.CMYK) //add new doc  
     }
     app.activeDocument = originalDoc
     

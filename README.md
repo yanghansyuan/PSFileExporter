@@ -1,9 +1,10 @@
 # PSFileExporter
 Export every group in Photoshop to separate files. 
 
-version: v1.6 2018/08/17
+version: v1.61 2018/08/17
 update:
 1.add basic fileformats
+2.fix resolution problem
 
 You can double click this file, and choose open with Photoshop to excute the script.
 Or you can put this script under the Photoshop path and excute from the Photoshop: File > Script >

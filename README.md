@@ -15,7 +15,7 @@ C:\Program Files\Adobe\Adobe Photoshop version you have\Presets\Scripts
 Mac:
 Application > Photoshop version you have > Presets > Scripts
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="J9Y9KYK37HR3J">
 <table>
@@ -29,4 +29,4 @@ Application > Photoshop version you have > Presets > Scripts
 <input type="image" src="https://www.paypalobjects.com/en_US/TW/i/btn/btn_buynowCC_LG_wCUP.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
 <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </form>
-)
+

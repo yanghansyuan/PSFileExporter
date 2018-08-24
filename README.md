@@ -15,4 +15,4 @@ C:\Program Files\Adobe\Adobe Photoshop version you have\Presets\Scripts
 Mac:
 Application > Photoshop version you have > Presets > Scripts
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](aboutvenice@gmail.com)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)]aboutvenice@gmail.com

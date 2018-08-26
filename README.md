@@ -1,5 +1,5 @@
 # PSFileExporter
-Export every groups/layers in Photoshop to separate files. 
+Export every groups/layers in Photoshop to separate files with different file types. 
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/1.png)
 
 version: v1.61 2018/08/17
@@ -16,9 +16,15 @@ C:\Program Files\Adobe\Adobe Photoshop version you have\Presets\Scripts
 Mac:
 Application > Photoshop version you have > Presets > Scripts
 
+This tool can export layers. 
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/2.png)
+
+or gorups.
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/3.png)
+
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/4.png)
+
+It can corp groups/layers size depends on the pixel.
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/5.png)
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/6.png)
 

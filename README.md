@@ -16,15 +16,14 @@ C:\Program Files\Adobe\Adobe Photoshop version you have\Presets\Scripts
 Mac:
 Application > Photoshop version you have > Presets > Scripts
 
-This tool can export layers. 
+This tool can export layers/groups
+
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/2.png)
-
-or gorups.
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/3.png)
-
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/4.png)
 
 It can corp groups/layers size depends on the pixel.
+
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/5.png)
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/6.png)
 

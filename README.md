@@ -1,5 +1,6 @@
 # PSFileExporter
-Export every group in Photoshop to separate files. 
+Export every groups/layers in Photoshop to separate files. 
+![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/1.png)
 
 version: v1.61 2018/08/17
 update:
@@ -14,6 +15,13 @@ C:\Program Files\Adobe\Adobe Photoshop version you have\Presets\Scripts
 
 Mac:
 Application > Photoshop version you have > Presets > Scripts
+
+![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/2.png)
+![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/3.png)
+![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/4.png)
+![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/5.png)
+![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/6.png)
+
 
 You can buy me a coffee if this saves your time. :)
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=J9Y9KYK37HR3J)

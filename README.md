@@ -22,7 +22,7 @@ This tool can export layers/groups
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/3.png)
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/4.png)
 
-It can corp groups/layers size depends on the pixel.
+It can crop groups/layers size depends on the pixel.
 
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/5.png)
 ![image](https://github.com/yanghansyuan/PSFileExporter/blob/master/Pic/6.png)
